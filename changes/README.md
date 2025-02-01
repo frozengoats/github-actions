@@ -1,0 +1,42 @@
+# changes
+detect changes in a multi-tenant repository, for use with a matrix style workflow where each changed directory will spawn a concurrent job.
+see [action.yml](https://github.com/frozengoats/github-actions/blob/main/changes/action.yml) for detailed configuration
+
+## example
+```
+name: execute publish job against each directory containing changes
+
+on:
+  push:
+    branches:
+    - "**"
+
+jobs:
+  get-changes:
+    runs-on: ubuntu-22.04
+    name: generate-changed-dir-matrix
+    outputs:
+      directories: ${{ steps.check-changes.outputs.directories }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - id: check-changes
+      uses: frozengoats/github-actions/changes
+      with:
+        exclude: .git*
+        must-contain: VERSION
+
+  publish:
+    needs: get-changes
+    runs-on: ubuntu-22.04
+    if: needs.get-changes.outputs.directories != '[]'
+    strategy:
+      matrix:
+        item: ${{ fromJson(needs.check-changes.outputs.directories) }}
+    steps:
+    - name: display info
+      run: |
+        echo ${{ matrix.item.name }}
+        echo ${{ maxrix.item.path }}
+```

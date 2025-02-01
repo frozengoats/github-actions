@@ -1,0 +1,56 @@
+name: execute release actions
+
+on:
+  push:
+    branches:
+    - "**"
+
+jobs:
+  find-changed-dirs:
+    runs-on: ubuntu-22.04
+    name: generate-changed-dir-matrix
+    outputs:
+      directories: ${{ steps.check-changes.outputs.directories }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - id: check-changes
+      uses: frozengoats/github-actions/changes@stage_new_actions
+      with:
+        exclude: .git*
+
+  publish:
+    needs: find-changed-dirs
+    runs-on: ubuntu-22.04
+    if: needs.find-changed-dirs.outputs.directories != '[]'
+    strategy:
+      matrix:
+        item: ${{ fromJson(needs.find-changed-dirs.outputs.directories) }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: get version
+      uses: frozengoats/github-actions/version@stage_new_actions
+      with:
+        working-directory: ${{ matrix.item.path }}
+        filename: package.json
+        tag-prefix: "${{ matrix.item.name }}-v"
+
+    - uses: frozengoats/github-actions/release@stage_new_actions
+      with:
+        create-release: true
+        create-version-tag: true
+        create-major-version-tag: 'true'
+
+  # this step is required, only when using the changes action.  it is required in order to maintain a base for new changes
+  # while running all the previous actions at the point where a merge has just been performed.
+  update-base-tag:
+    needs: publish
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: frozengoats/github-actions/release@stage_new_actions
+      with:
+        update-base-tag: 'true'

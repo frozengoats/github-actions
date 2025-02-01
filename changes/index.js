@@ -24,12 +24,18 @@ async function ensureBaseTag(octokit, tagName, parentBranch) {
 
     const branchHead = resp.data.object.sha
 
-    await octokit.rest.git.createRef({
-      owner:  github.context.payload.repository.owner.login,
-      repo: github.context.payload.repository.name,
-      ref: `refs/tags/${tagName}`,
-      sha: branchHead,
-    })
+    try {
+      await octokit.rest.git.createRef({
+        owner:  github.context.payload.repository.owner.login,
+        repo: github.context.payload.repository.name,
+        ref: `refs/tags/${tagName}`,
+        sha: branchHead,
+      })
+    } catch(error) {
+      console.error(error)
+      console.log("the action is attempting to create a tag to baseline change detection")
+      console.log("an error here often requires you to enable write capability for actions")
+    }
   }
 }
 

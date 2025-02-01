@@ -1,0 +1,29 @@
+name: 'release'
+description: 'generates tag and release based on environment variables created by frozengoats/github-actions/version'
+inputs:
+  create-release:
+    description: 'create a release if the current branch is the parent branch (create-version-tag must be enabled)'
+    type: 'boolean'
+    default: 'false'
+  create-version-tag:
+    description: 'create a version tag if the current branch is the parent branch'
+    type: 'boolean'
+    default: 'false'
+  create-major-version-tag:
+    description: 'create a major version tag if the current branch is the parent branch'
+    type: 'boolean'
+    default: 'false'
+  update-base-tag:
+    description: 'update the base tag when using in conjunction with frozengoats/github-actions/changes (runs at the end of all jobs on merge)'
+    type: 'boolean'
+    default: 'false'
+  parent-branch:
+    description: 'parent branch'
+    required: false
+  base-tag:
+    default: 'change-base'
+  github-token:
+    default: ${{ github.token }}
+runs:
+  using: 'node20'
+  main: 'index.js'

@@ -1,0 +1,32 @@
+name: 'changes'
+description: 'generate a list of directories containing changes'
+inputs:
+  parent-branch:
+    description: 'parent branch'
+    required: false
+  working-directory:
+    description: 'alternate working directory if not starting at process.env.GITHUB_WORKSPACE'
+    default: ''
+  base-directory:
+    description: 'base directory to iterate for changed directories (starting from the working-directory) - ex: dir1 ex: dir1/dir2  ex: .'
+    default: '.'
+  include:
+    description: 'comma separated list of glob patterns of files to include - ex: *  ex: code-*  ex: dir1,dir2,dir-*'
+    default: '*'
+    required: false
+  exclude:
+    description: 'comma separated list of glob patterns of files to exclude - ex: .git*  ex: .git*,template'
+    required: false
+  must-contain:
+    description: 'comma separated list of sub-paths which must exist in order to be traversed - ex: VERSION  ex: subdir/important.txt'
+    required: false
+  github-token:
+    default: ${{ github.token }}
+  base-tag:
+    default: 'change-base'
+outputs:
+  directories:
+    description: 'json list directory objects with changes - {"name": <name>, "path": <path>}'
+runs:
+  using: 'node20'
+  main: 'index.js'

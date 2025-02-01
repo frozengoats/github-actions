@@ -1,0 +1,40 @@
+name: 'version'
+description: 'capture version info and ensure revision update'
+inputs:
+  working-directory:
+    description: 'alternate working directory if not starting at process.env.GITHUB_WORKSPACE'
+    default: ''
+  filename:
+    description: 'path relative to the working directory, where the file containing the version is located'
+    default: 'VERSION'
+  json-key:
+    description: 'dot delimited key, valid when file is a JSON file: eg: abc.def.ghi'
+    default: ''
+  toml-section:
+    description: 'toml section name, excluding "[]" characters'
+    default: ''
+  toml-key:
+    description: 'toml key name, located within toml-section'
+    default: ''
+  tag-prefix:
+    description: 'prefix to prepend to version tag (especially useful in matrix or when needing to add a v)'
+    default: ''
+  github-token:
+    default: ${{ github.token }}
+outputs:
+  # For each output, a corresponding environment variable is created, hyphens are replaced by underscores, and all-caps is used
+  version:
+    description: 'the current version of this revision'
+  version-commit:
+    description: 'the current version of this revision with a ".dev.<short-commit>" suffix'
+  version-branch:
+    description: 'the current version of this revision with a ".dev.<branch>" suffix'
+  version-timestamp:
+    description: 'the current version of this revision with a ".dev<unix-ts>" suffix'
+  version-tag:
+    description: 'the name of the tag which will represent this version (includes tag prefix)'
+  version-tag-major:
+    description: 'the name of the tag which will represent the major version only (includes tag prefix)'
+runs:
+  using: 'node20'
+  main: 'index.js'

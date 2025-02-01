@@ -39,6 +39,7 @@ jobs:
       with:
         working-directory: ${{ matrix.item.path }}
         filename: package.json
+        json-key: version
         tag-prefix: "${{ matrix.item.name }}-v"
 
     - uses: frozengoats/github-actions/release@stage_new_actions

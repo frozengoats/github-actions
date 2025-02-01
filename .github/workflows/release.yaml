@@ -1,4 +1,6 @@
 name: execute release actions
+permissions:
+  contents: write
 
 on:
   push:
@@ -17,8 +19,6 @@ jobs:
         fetch-depth: 0
     - id: check-changes
       uses: frozengoats/github-actions/changes@stage_new_actions
-      permissions:
-        contents: write
       with:
         exclude: .git*
 
@@ -42,8 +42,6 @@ jobs:
         tag-prefix: "${{ matrix.item.name }}-v"
 
     - uses: frozengoats/github-actions/release@stage_new_actions
-      permissions:
-        contents: write
       with:
         create-release: true
         create-version-tag: true
@@ -56,7 +54,5 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - uses: frozengoats/github-actions/release@stage_new_actions
-      permissions:
-        contents: write
       with:
         update-base-tag: 'true'

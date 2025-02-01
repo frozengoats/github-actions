@@ -32,8 +32,8 @@ async function ensureBaseTag(octokit, tagName, parentBranch) {
         sha: branchHead,
       })
     } catch(error) {
-      console.error(`${error.message}\nthe action is attempting to create a tag to baseline change detection\nan error here often requires you to enable write capability for actions\n`)
-      throw(error)
+      // add extra messaging to this error, hopefully it gets the message across
+      throw Error(`${error.message}\nthe action is attempting to create a tag to baseline change detection\nan error here often requires you to enable write capability for actions\n`)
     }
   }
 }

@@ -5,8 +5,6 @@ see [action.yml](https://github.com/frozengoats/github-actions/blob/main/changes
 ## example
 ```
 name: execute publish job against each directory containing changes
-
-name: execute release actions
 permissions:
   contents: write
   checks: read

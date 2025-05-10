@@ -5,6 +5,9 @@ see [action.yml](https://github.com/frozengoats/github-actions/blob/main/changes
 ## example
 ```
 name: execute publish job against each directory containing changes
+permissions:
+  contents: write
+  checks: read
 
 on:
   push:
@@ -13,7 +16,7 @@ on:
 
 jobs:
   get-changes:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: generate-changed-dir-matrix
     outputs:
       directories: ${{ steps.check-changes.outputs.directories }}
@@ -22,21 +25,25 @@ jobs:
       with:
         fetch-depth: 0
     - id: check-changes
-      uses: frozengoats/github-actions/changes
+      uses: frozengoats/github-actions/changes@changes-v1
       with:
         exclude: .git*
         must-contain: VERSION
 
   publish:
     needs: get-changes
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: needs.get-changes.outputs.directories != '[]'
     strategy:
       matrix:
         item: ${{ fromJson(needs.get-changes.outputs.directories) }}
+    defaults:
+      run:
+        working-directory: ${{ matrix.item.path }}
     steps:
-    - name: display info
-      run: |
-        echo ${{ matrix.item.name }}
-        echo ${{ matrix.item.path }}
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: build docker image
+      run: make build
 ```

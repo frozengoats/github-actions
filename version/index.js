@@ -8,6 +8,11 @@ const sectionMatcher = new RegExp(/^\s*\[+([^\]]+)]+\s*$/g)
 
 async function action() {
   try {
+    let parentBranch = core.getInput('parent-branch')
+    if (parentBranch == '') {
+      parentBranch = github.context.payload.repository.default_branch
+    }
+
     let workingDir = core.getInput('working-directory')
     if (workingDir == '') {
       workingDir = process.env.GITHUB_WORKSPACE
@@ -124,6 +129,7 @@ async function action() {
     core.setOutput('version-timestamp', timestampVersion)
     core.setOutput('version-tag', versionTag)
     core.setOutput('version-tag-major', versionTagMajor)
+    core.setOutput('on-parent-branch', (branch === parentBranch))
 
     core.exportVariable('VERSION', version);
     core.exportVariable('VERSION_COMMIT', commitVersion);

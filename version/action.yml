@@ -21,6 +21,9 @@ inputs:
     default: ''
   github-token:
     default: ${{ github.token }}
+  parent-branch:
+    description: 'parent branch, defaults to the repository default branch'
+    default: ''
 outputs:
   # For each output, a corresponding environment variable is created, hyphens are replaced by underscores, and all-caps is used
   version:
@@ -35,6 +38,8 @@ outputs:
     description: 'the name of the tag which will represent this version (includes tag prefix)'
   version-tag-major:
     description: 'the name of the tag which will represent the major version only (includes tag prefix)'
+  on-parent-branch:
+    description: 'string boolean set to true when the current branch is the parent branch'
 runs:
   using: 'node20'
   main: 'index.js'

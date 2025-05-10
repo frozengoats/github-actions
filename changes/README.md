@@ -33,10 +33,10 @@ jobs:
     if: needs.get-changes.outputs.directories != '[]'
     strategy:
       matrix:
-        item: ${{ fromJson(needs.check-changes.outputs.directories) }}
+        item: ${{ fromJson(needs.get-changes.outputs.directories) }}
     steps:
     - name: display info
       run: |
         echo ${{ matrix.item.name }}
-        echo ${{ maxrix.item.path }}
+        echo ${{ matrix.item.path }}
 ```

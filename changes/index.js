@@ -6,6 +6,7 @@ const path = require('node:path');
 
 const fs = require('node:fs');
 async function ensureBaseTag(octokit, tagName, parentBranch) {
+  console.log(`looking for tag named ${tagName}`)
   try {
     await octokit.rest.checks.listForRef({
       owner:  github.context.payload.repository.owner.login,
@@ -14,6 +15,7 @@ async function ensureBaseTag(octokit, tagName, parentBranch) {
     })
     console.log(`tag ${tagName} located`)
   } catch (error) {
+    console.log(`couldn't find base tag ${tagName}\n${error}`)
     console.log(`creating tag ${tagName} against ${parentBranch}`)
 
     const resp = await octokit.rest.git.getRef({

@@ -15,6 +15,7 @@ async function ensureBaseTag(octokit, tagName, parentBranch) {
     })
     console.log(`tag ${tagName} located`)
   } catch (error) {
+    console.log(`couldn't find base tag ${tagName}\n${error}`)
     console.log(`creating tag ${tagName} against ${parentBranch}`)
 
     const resp = await octokit.rest.git.getRef({

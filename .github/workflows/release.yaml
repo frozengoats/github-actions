@@ -18,7 +18,7 @@ jobs:
       with:
         fetch-depth: 0
     - id: check-changes
-      uses: frozengoats/github-actions/changes@stage_new_actions
+      uses: frozengoats/github-actions/changes@changes_v1
       with:
         exclude: .git*
 
@@ -35,7 +35,7 @@ jobs:
         fetch-depth: 0
 
     - name: get version
-      uses: frozengoats/github-actions/version@stage_new_actions
+      uses: frozengoats/github-actions/version@version_v1
       with:
         working-directory: ${{ matrix.item.path }}
         filename: package.json
@@ -54,6 +54,6 @@ jobs:
     needs: publish
     runs-on: ubuntu-22.04
     steps:
-    - uses: frozengoats/github-actions/release@stage_new_actions
+    - uses: frozengoats/github-actions/release@release_v1
       with:
         update-base-tag: 'true'

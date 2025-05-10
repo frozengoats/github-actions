@@ -9,6 +9,7 @@ async function action() {
     }
 
     const baseTag = core.getInput('base-tag')
+    const tagPrefix = core.getInput('tag-prefix')
     const createVersionTag = core.getBooleanInput('create-version-tag')
     const createRelease = core.getBooleanInput('create-release')
     const createMajorVersionTag = core.getBooleanInput('create-major-version-tag')
@@ -38,10 +39,11 @@ async function action() {
 
     // if the current branch is the parent branch, we should create the specified tags
     if (createVersionTag === true) {
-      const versionTag = process.env.VERSION_TAG
+      var versionTag = process.env.VERSION_TAG
       if (versionTag === undefined) {
         throw new Error("no version tag found in the environment, did you run the frozengoats/github-actions/version action?")
       }
+      versionTag = `${tagPrefix}${versionTag}`
 
       if (onParentBranch) {
         console.log(`attempt to ${actionText} version tag ${versionTag} against ${process.env.GITHUB_SHA}`)
@@ -65,10 +67,11 @@ async function action() {
     }
 
     if (createMajorVersionTag === true) {
-      const versionTag = process.env.VERSION_TAG_MAJOR
+      var versionTag = process.env.VERSION_TAG_MAJOR
       if (versionTag === undefined) {
         throw new Error("no major version tag found in the environment, did you run the frozengoats/github-actions/version action?")
       }
+      versionTag = `${tagPrefix}${versionTag}`
 
       if (onParentBranch) {
         try {

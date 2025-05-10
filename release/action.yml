@@ -1,6 +1,9 @@
 name: 'release'
 description: 'generates tag and release based on environment variables created by frozengoats/github-actions/version'
 inputs:
+  tag-prefix:
+    description: 'will prefix any git tag created with this string'
+    default: ''
   create-release:
     description: 'create a release if the current branch is the parent branch (create-version-tag must be enabled)'
     type: 'boolean'

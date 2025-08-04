@@ -14,6 +14,8 @@ async function action() {
     const createRelease = core.getBooleanInput('create-release')
     const createMajorVersionTag = core.getBooleanInput('create-major-version-tag')
     const updateBaseTag = core.getBooleanInput('update-base-tag')
+    const binaryPath = core.getInput('binary-path')
+    const binaryName = core.getInput('binary-name')
     const githubToken = core.getInput('github-token')
     const octokit = github.getOctokit(githubToken)
 
@@ -56,11 +58,22 @@ async function action() {
 
         if (createRelease) {
           console.log(`attempt to ${actionText} release for tag ${versionTag} against ${process.env.GITHUB_SHA}`)
-          await octokit.rest.repos.createRelease({
+          const response = await octokit.rest.repos.createRelease({
             owner:  github.context.payload.repository.owner.login,
             repo: github.context.payload.repository.name,
             tag_name: versionTag,
           })
+          if (binaryPath != '' && binaryName != '') {
+            console.log(`uploading release binary ${binaryName}`)
+            const releaseId = response.data.id;
+            await github.repos.uploadReleaseAsset({
+              owner:  github.context.payload.repository.owner.login,
+              repo: github.context.payload.repository.name,
+              release_id: releaseId,
+              name: binaryName,
+              data: fs.readFileSync(binaryPath)
+            });
+          }
         }
       }
       console.log(`${actionText} version tag ${versionTag} against ${process.env.GITHUB_SHA}`)

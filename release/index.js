@@ -66,7 +66,7 @@ async function action() {
           if (binaryPath != '' && binaryName != '') {
             const releaseId = response.data.id;
             console.log(`uploading release binary ${binaryName} on release ${releaseId}`)
-            await github.repos.uploadReleaseAsset({
+            await octokit.rest.repos.uploadReleaseAsset({
               owner:  github.context.payload.repository.owner.login,
               repo: github.context.payload.repository.name,
               release_id: releaseId,

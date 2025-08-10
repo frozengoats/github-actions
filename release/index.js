@@ -64,8 +64,8 @@ async function action() {
             tag_name: versionTag,
           })
           if (binaryPath != '' && binaryName != '') {
-            console.log(`uploading release binary ${binaryName}`)
             const releaseId = response.data.id;
+            console.log(`uploading release binary ${binaryName} on release ${releaseId}`)
             await github.repos.uploadReleaseAsset({
               owner:  github.context.payload.repository.owner.login,
               repo: github.context.payload.repository.name,

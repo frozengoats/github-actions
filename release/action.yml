@@ -25,6 +25,12 @@ inputs:
     required: false
   base-tag:
     default: 'change-base'
+  binary-path:
+    description: 'path to binary to upload with release'
+    default: ''
+  binary-name:
+    description: 'desired name of binary when shown in release'
+    default: ''
   github-token:
     default: ${{ github.token }}
 runs:

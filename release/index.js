@@ -1,5 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+const path = require("node:path");
 const fs = require('node:fs');
 
 async function action() {
@@ -17,6 +18,7 @@ async function action() {
     const updateBaseTag = core.getBooleanInput('update-base-tag')
     const binaryPath = core.getInput('binary-path')
     const binaryName = core.getInput('binary-name')
+    const releaseDir = core.getInput('release-dir')
     const githubToken = core.getInput('github-token')
     const octokit = github.getOctokit(githubToken)
 
@@ -74,6 +76,24 @@ async function action() {
               name: binaryName,
               data: fs.readFileSync(binaryPath)
             });
+          }
+          if (releaseDir != '') {
+            const releaseId = response.data.id;
+            console.log(`uploading release directory ${releaseDir} on release ${releaseId}`)
+
+            const filenames = fs.readdirSync(releaseDir)
+            for (const filename of filenames) {
+              const filePath = path.join(releaseDir, filename);
+              console.log("uploading file", filePath);
+
+              await octokit.rest.repos.uploadReleaseAsset({
+                owner:  github.context.payload.repository.owner.login,
+                repo: github.context.payload.repository.name,
+                release_id: releaseId,
+                name: filename,
+                data: fs.readFileSync(filePath)
+              });   
+            }
           }
         }
       }

@@ -31,6 +31,9 @@ inputs:
   binary-name:
     description: 'desired name of binary when shown in release'
     default: ''
+  release-dir:
+    description: 'directory of files to be included verbatim in the release (single-level)'
+    default: ''
   github-token:
     default: ${{ github.token }}
 runs:

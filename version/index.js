@@ -112,7 +112,8 @@ async function action() {
       }
 
       let clFirstLine = clLines[0];
-      let verIndex = clFirstLine.indexOf(version)
+      let verIndex = clFirstLine.indexOf(version);
+      console.log(`version index is ${verIndex} and version is ${version} and line is ${clFirstLine}`)
       if (verIndex < 0) {
         throw new Error(`first line of changelog does not contain "${version}"`)
       }

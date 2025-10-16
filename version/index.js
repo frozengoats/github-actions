@@ -124,7 +124,7 @@ async function action() {
         }
       }
 
-      let afterIndex = verIndex + version.length() + 1;
+      let afterIndex = verIndex + version.length + 1;
       if (afterIndex < clFirstLine.length) {
         let after = clFirstLine.charCodeAt(afterIndex);
         if (after >= 48 && after <= 57) {

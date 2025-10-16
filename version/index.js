@@ -125,6 +125,7 @@ async function action() {
       }
 
       let afterIndex = verIndex + version.length + 1;
+      console.log(`after index ${afterIndex} and length ${version.length}`)
       if (afterIndex < clFirstLine.length) {
         let after = clFirstLine.charCodeAt(afterIndex);
         if (after >= 48 && after <= 57) {

@@ -24,16 +24,17 @@ jobs:
       run: make check-format
 
     - name: get version
-      uses: frozengoats/github-actions/version
+      uses: frozengoats/github-actions/version@version-v1
       with:
         filename: Cargo.toml
         toml-section: 'package'
         toml-key: 'version'
+        changelog-enforced: true
 
     - name: run tests
       run: make test
 
-    - uses: frozengoats/github-actions/release
+    - uses: frozengoats/github-actions/release@release-v1
       with:
         create-release: true
         create-version-tag: true

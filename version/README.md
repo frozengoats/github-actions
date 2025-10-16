@@ -29,7 +29,7 @@ jobs:
         filename: Cargo.toml
         toml-section: 'package'
         toml-key: 'version'
-        changelog-enforce: true
+        changelog-enforced: true
 
     - name: run tests
       run: make test

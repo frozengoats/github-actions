@@ -41,7 +41,7 @@ jobs:
         filename: package.json
         json-key: version
         tag-prefix: "${{ matrix.item.name }}-v"
-        changelog-enforce: true
+        changelog-enforced: true
 
     - uses: frozengoats/github-actions/release@stage_new_actions
       with:

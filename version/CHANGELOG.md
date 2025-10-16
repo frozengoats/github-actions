@@ -1,2 +1,2 @@
-# 1.0.0
+# 1.0.22
 - added changelog enforcement support

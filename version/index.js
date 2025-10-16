@@ -8,6 +8,9 @@ const sectionMatcher = new RegExp(/^\s*\[+([^\]]+)]+\s*$/g)
 
 async function action() {
   try {
+    const changelogFilename = core.getInput('changelog-filename')
+    const changelogEnforced = core.getBooleanInput('changelog-enforced')
+
     let parentBranch = core.getInput('parent-branch')
     if (parentBranch == '') {
       parentBranch = github.context.payload.repository.default_branch
@@ -92,6 +95,42 @@ async function action() {
 
     if (version.startsWith('"') && version.endsWith('"')) {
       version = version.substring(1, version.length - 1);
+    }
+
+    if (changelogEnforced == true) {
+      const fullChangelogPath = path.normalize(path.join(workingDir, changelogFilename))
+      if (!fs.existsSync(fullChangelogPath)) {
+        throw new Error(`unable to locate changelog file ${fullChangelogPath}`)
+      }
+
+      let clData = fs.readFileSync(fullChangelogPath)
+      let clDataString = clData.toString('utf8')
+      clDataString = clDataString.trim()
+      let clLines = clDataString.split("\n")
+      if (clLines.length == 0) {
+        throw new Error("changelog does not contain any data")
+      }
+
+      let clFirstLine = clLines[0];
+      let verIndex = clFirstLine.indexOf(version)
+      if (verIndex < 0) {
+        throw new Error(`first line of changelog does not contain "${version}"`)
+      }
+
+      if (verIndex > 0) {
+        let before = clFirstLine.charCodeAt(verIndex - 1);
+        if (before >= 48 && before <= 57) {
+          throw new Error(`version at first line in changelog does not appear to match the current version`)
+        }
+      }
+
+      let afterIndex = verIndex + version.length() + 1;
+      if (afterIndex < clFirstLine.length) {
+        let after = clFirstLine.charCodeAt(afterIndex);
+        if (after >= 48 && after <= 57) {
+          throw new Error(`version at first line in changelog does not appear to match the current version`)
+        }
+      }
     }
 
     const commitSha = process.env.GITHUB_SHA

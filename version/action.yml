@@ -7,6 +7,13 @@ inputs:
   filename:
     description: 'path relative to the working directory, where the file containing the version is located'
     default: 'VERSION'
+  changelog-filename:
+    description: 'filename relative to the working directory which contains a running list of changes, the most recent version on the top'
+    default: 'CHANGELOG.md'
+  changelog-enforced:
+    description: 'if true, a changelog is required to contain a top entry, matching the current version file'
+    type: 'boolean'
+    default: 'false'
   json-key:
     description: 'dot delimited key, valid when file is a JSON file: eg: abc.def.ghi'
     default: ''

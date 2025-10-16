@@ -35,7 +35,7 @@ jobs:
         fetch-depth: 0
 
     - name: get version
-      uses: frozengoats/github-actions/version@add_changelog
+      uses: frozengoats/github-actions/version@version-v1
       with:
         working-directory: ${{ matrix.item.path }}
         filename: package.json
